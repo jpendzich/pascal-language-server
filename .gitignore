@@ -40,6 +40,12 @@ clients/pasls-vscode/node_modules/*
 clients/pasls-vscode/out/*
 *.vsix
 
+# Pascal Language Server binaries
+src/standard/pasls
+src/tests/testlsp
+src/proxy/paslsproxy
+src/socketserver/paslssock
+
 # macOS specific
 .DS_Store
 
