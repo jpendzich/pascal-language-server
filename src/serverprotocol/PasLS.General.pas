@@ -117,14 +117,15 @@ procedure TInitialize.ApplyConfigSettings(CodeToolsOptions: TCodeToolsOptions);
 var
   env: TConfigEnvironmentSettings;
 begin
-  env := EnvironmentSettings;
+  // Read environment settings from ServerSettings (which was populated from initializationOptions)
+  // or from EnvironmentSettings as fallback for environment variables
   with CodeToolsOptions do
     begin
-      FPCPath := MaybeSet(Env.pp, FPCPath);
-      FPCSrcDir := MaybeSet(Env.fpcDir, FPCSrcDir);
-      LazarusSrcDir := MaybeSet(Env.lazarusDir, LazarusSrcDir);
-      TargetOS := MaybeSet(Env.fpcTarget, TargetOS);
-      TargetProcessor := MaybeSet(Env.fpcTargetCPU, TargetProcessor);
+      FPCPath := MaybeSet(ServerSettings.pp, EnvironmentSettings.pp);
+      FPCSrcDir := MaybeSet(ServerSettings.fpcDir, EnvironmentSettings.fpcDir);
+      LazarusSrcDir := MaybeSet(ServerSettings.lazarusDir, EnvironmentSettings.lazarusDir);
+      TargetOS := MaybeSet(ServerSettings.fpcTarget, EnvironmentSettings.fpcTarget);
+      TargetProcessor := MaybeSet(ServerSettings.fpcTargetCPU, EnvironmentSettings.fpcTargetCPU);
     end;
 end;
 

@@ -88,6 +88,12 @@ type
     fScanFilePatterns: TStrings;
     fExcludeSymbols: TStrings;
     fExcludedSymbolSet: TExcludableSymbols;
+    // Environment settings for FPC and Lazarus
+    ffpcDir: string;
+    ffpcTarget: string;
+    ffpcTargetCPU: string;
+    flazarusDir: string;
+    fpp: string;
     procedure SetFPCOptions(AValue: TStrings);
     procedure SetExcludeWorkspaceFolders(AValue: TStrings);
     procedure SetScanFilePatterns(AValue: TStrings);
@@ -130,7 +136,7 @@ type
     property documentSymbols: Boolean read fBooleans[7] write fBooleans[7];
     // completions contain a minimal amount of extra information
     property minimalisticCompletions: Boolean read fBooleans[8] write fBooleans[8];
-    // syntax errors as shown in the UI with ‘window/showMessage’
+    // syntax errors as shown in the UI with 'window/showMessage'
     property showSyntaxErrors: Boolean read fBooleans[9] write fBooleans[9];
     // ignores completion items like "begin" and "var" which may interfer with IDE snippets
     property ignoreTextCompletions: Boolean read fBooleans[10] write fBooleans[10];
@@ -144,6 +150,16 @@ type
     property flatSymbolMode: Boolean read fBooleans[12] write fBooleans[12];
     // Array of symbol types to exclude from document symbols
     property excludeSymbols: TStrings read fExcludeSymbols write SetExcludeSymbols;
+    // FPC source directory
+    property fpcDir : string Read ffpcDir Write ffpcDir;
+    // FPC target OS (linux, win32, darwin)
+    property fpcTarget : string read ffpcTarget write ffpcTarget;
+    // FPC target CPU (i386, x86_64, arm)
+    property fpcTargetCPU : string read ffpcTargetCPU write ffpcTargetCPU;
+    // Lazarus source directory
+    property lazarusDir : string read flazarusDir write flazarusDir;
+    // FPC compiler path
+    property pp : string read fpp write fpp;
   public
     constructor Create; override;
     Destructor Destroy; override;
@@ -303,6 +319,20 @@ begin
     Config:=Src.Config;
     ScanFilePatterns:=Src.ScanFilePatterns;
     ExcludeSymbols:=Src.ExcludeSymbols;
+    ffpcDir:=Src.ffpcDir;
+    ffpcTarget:=Src.ffpcTarget;
+    ffpcTargetCPU:=Src.ffpcTargetCPU;
+    flazarusDir:=Src.flazarusDir;
+    fpp:=Src.fpp;
+    end
+  else if (aSource is TConfigEnvironmentSettings) then
+    begin
+      // Assign from TConfigEnvironmentSettings
+      ffpcDir := TConfigEnvironmentSettings(aSource).ffpcDir;
+      ffpcTarget := TConfigEnvironmentSettings(aSource).ffpcTarget;
+      ffpcTargetCPU := TConfigEnvironmentSettings(aSource).ffpcTargetCPU;
+      flazarusDir := TConfigEnvironmentSettings(aSource).flazarusDir;
+      fpp := TConfigEnvironmentSettings(aSource).fpp;
     end
   else
     inherited Assign(aSource);
@@ -468,6 +498,15 @@ begin
       fpcTargetCPU:=src.fpcTargetCPU;
       lazarusDir:=src.lazarusDir;
       pp:=src.pp;
+    end
+  else if aSource is TServerSettings then
+    begin
+      // Read environment settings from TServerSettings
+      fpcDir:=TServerSettings(aSource).fpcDir;
+      fpcTarget:=TServerSettings(aSource).fpcTarget;
+      fpcTargetCPU:=TServerSettings(aSource).fpcTargetCPU;
+      lazarusDir:=TServerSettings(aSource).lazarusDir;
+      pp:=TServerSettings(aSource).pp;
     end
   else
     inherited Assign(aSource);
