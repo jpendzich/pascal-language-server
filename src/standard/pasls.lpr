@@ -69,7 +69,7 @@ begin
       writeln('Command path "',path,'" can''t be found');
       exit(false)
       end;
-    DebugSendMessage(output,aContext, method, GetFileAsString(path));
+    DebugSendMessage(StdErr,aContext, method, GetFileAsString(path));
     Inc(i, 2);
   end;
 end;

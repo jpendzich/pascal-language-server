@@ -71,16 +71,16 @@ var
 
 begin
   Response:=Nil;
-  Writeln(aFile,'▶️ ', aMethod);
+  Writeln(StdErr,'▶️ ', aMethod);
   Content := '{"jsonrpc": "2.0","id": '+aContext.NextMessageID.ToString+', "method": "'+aMethod+'","params": '+aParams+'}';
   Request := GetJSON(Content, True);
   try
     Response := aContext.Execute(Request);
     if Assigned(Response) then
       begin
-      writeln(aFile,'◀️ response: ');
-      writeln(aFile,Response.FormatJSON);
-      Flush(aFile);
+      writeln(StdErr,'◀️ response: ');
+      writeln(StdErr,Response.FormatJSON);
+      Flush(StdErr);
       end;
   finally
     Request.Free;
